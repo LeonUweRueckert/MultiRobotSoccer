@@ -1,0 +1,1 @@
+{"version":3,"file":"halt copy.js","sourceRoot":"","sources":["../../../../stp_vibes/plays/halt copy.ts"],"names":[],"mappings":";;;;IAEA,MAAa,IAAI;QAEhB;QAEA,CAAC;QAED,GAAG;YACF,KAAK,IAAI,KAAK,IAAI,KAAK,CAAC,cAAc,EAAE;gBACvC,IAAI,KAAK,CAAC,WAAW,IAAI,SAAS,EAAE;oBACnC,KAAK,CAAC,UAAU,CAAC,IAAI,CAAC,CAAC;oBACvB,KAAK,CAAC,IAAI,EAAE,CAAC;iBACb;aAED;QACF,CAAC;KACD;IAfD,oBAeC"}
