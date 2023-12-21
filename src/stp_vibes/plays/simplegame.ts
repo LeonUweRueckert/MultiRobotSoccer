@@ -65,8 +65,7 @@ export class Game extends Playstub {
 					skill.run(new Vector(x,y), standardOrientation);
 					numDefenders++;
 
-				//} else if(numChasers < chasersCount) { //chasers
-				} else if(false){
+				} else if(numChasers < chasersCount) { //chasers
 					new ShootAtGoal(robot).run();
 					numChasers++;
 
