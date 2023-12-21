@@ -1,10 +1,11 @@
 import * as World from "base/world";
-import { Game } from "stp_vibes/plays/game";
+import { Game } from "stp_vibes/plays/simplegame";
 import {Halt} from "stp_vibes/plays/halt";
+import { Playstub } from "./plays/playstub";
 
 //import { Play } from "stp_vibes/plays/playstub"
 
-let currentPlay = new Game();
+let currentPlay : Playstub = new Game();
 
 function redecide_play(): boolean {
 	// Decide if you want to change your current play

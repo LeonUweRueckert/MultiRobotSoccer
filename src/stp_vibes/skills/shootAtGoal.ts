@@ -28,7 +28,7 @@ export class ShootAtGoal {
         let isInLineWithGoal = ballToGoal.absoluteAngleDiff(ballToPlayer) < this.accuracy;
 
         if(!isInLineWithGoal) { //take aim
-            new MoveBehindBall(this.robot).run();
+            new MoveBehindBall(this.robot).run(World.Geometry.OpponentGoal);
         } else { //try to shoot
             if(this.robot.hasBall(World.Ball)) {
                 this.robot.shoot(10);

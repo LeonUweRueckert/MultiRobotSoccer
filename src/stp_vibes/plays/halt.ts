@@ -1,9 +1,10 @@
 import * as World from "base/world";
+import { Playstub } from "stp_vibes/plays/playstub";
 
-export class Halt{
+export class Halt extends Playstub{
     
     constructor(){
-
+        super();
     }
 
     run(){
