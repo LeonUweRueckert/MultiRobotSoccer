@@ -98,7 +98,6 @@ export class Game extends Playstub {
 			//Do Nothing
 			return;
 		}
-		amun.log("H")
 		let skill = new ShootMiddle(robot);
 		skill.run();
 	}
