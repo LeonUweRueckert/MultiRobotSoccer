@@ -22,10 +22,8 @@ export class ShootMiddle {
         let isInLineWithMiddle = ballToMiddle.absoluteAngleDiff(ballToPlayer) < this.accuracy;
         amun.log(ballToMiddle.absoluteAngleDiff(ballToPlayer))
         if(!isInLineWithMiddle) { //take aim         
-            amun.log("Positioning") 
             new MoveBehindBall(this.robot).run(middle);
         } else { //try to shoot
-            amun.log("Shooting")
             if(this.robot.hasBall(World.Ball)) {
                 this.robot.shoot(2);
             }
