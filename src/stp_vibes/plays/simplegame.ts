@@ -77,7 +77,7 @@ export class Game extends Playstub {
 
 				//  } else if(numChasers < chasersCount) { //chasers
 				if(numChasers < chasersCount) { //chasers
-				 	//this.makeChaser(robot);	
+				 	this.makeChaser(robot);	
 				 	numChasers++;
 
 				} else if(numBlockers < blockerCount) { //blockers
@@ -103,7 +103,7 @@ export class Game extends Playstub {
 			
 		}
 		Game.defenderManager.run(robots.slice(robots.length - attackerCount - defensePlayerCount, robots.length - attackerCount));
-		//Game.attackerManager.run(robots.slice(robots.length - attackerCount));
+		Game.attackerManager.run(robots.slice(robots.length - attackerCount));
 	}
 
 
