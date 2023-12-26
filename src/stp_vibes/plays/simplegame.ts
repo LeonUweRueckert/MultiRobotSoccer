@@ -22,15 +22,18 @@ export class Game extends Playstub {
 	}
 
 	run() {
-
+		amun.log("simplegame");
 		//specify the number of robots per position here
 		let robots = World.FriendlyRobotsAll;
 		let defensePlayerCount = 3;
 		let hasKeeper = World.FriendlyKeeper != undefined;
 		let chasersCount = 1;
 		let blockerCount = 1;
-		let wingmanCount = 1;
-		let attackerCount = robots.length - defensePlayerCount - chasersCount - (hasKeeper ? 1 : 0) - wingmanCount;
+		let wingmanCount = 0;
+		if(World.Ball.pos.y > World.Geometry.FieldHeightQuarter){
+			wingmanCount = 1;
+		}
+		let attackerCount = robots.length - defensePlayerCount - chasersCount - (hasKeeper ? 1 : 0) - blockerCount - wingmanCount;
 
 		//counters to keep track of assigning the next robot the correct role
 		let numDefenders = 0;
@@ -38,8 +41,9 @@ export class Game extends Playstub {
 		let numBlockers = 0;
 		let numAttackers = 0;
 		let numWingman = 0;
+		let counts = attackerCount + blockerCount + chasersCount + defensePlayerCount + (hasKeeper ? 1 : 0);
 		for(let robot of robots) {
-
+			
 			let lookAtBallorientation = World.Ball.pos.sub(robot.pos).angle();
 			let standardOrientation = World.Geometry.OpponentGoal.angle();
 
@@ -66,7 +70,7 @@ export class Game extends Playstub {
 					numDefenders++;
 
 				} else if(numChasers < chasersCount) { //chasers
-					new ShootAtGoal(robot).run();
+					this.makeChaser(robot);	
 					numChasers++;
 
 				} else if(numBlockers < blockerCount) { //blockers
@@ -87,6 +91,7 @@ export class Game extends Playstub {
 
 				} else if(numWingman < wingmanCount){
 					this.makeWingman(robot);
+					numWingman++;
 				}
 			}
 		}
@@ -94,11 +99,25 @@ export class Game extends Playstub {
 
 	private makeWingman(robot: FriendlyRobot){
 		let ballPosition = World.Ball.pos;
-		if(Math.abs(ballPosition.x) < World.Geometry.FieldWidthQuarter || ballPosition.y < World.Geometry.FieldHeightQuarter){
-			//Do Nothing
+		if(Math.abs(ballPosition.x) < World.Geometry.FieldWidthQuarter){
+			//Wait
 			return;
 		}
+		//Pass the Ball in front of enemy goal
 		let skill = new ShootMiddle(robot);
 		skill.run();
+
+	}
+
+	private makeChaser(robot: FriendlyRobot){
+		let ballPosition = World.Ball.pos;
+		if(Math.abs(ballPosition.x) > World.Geometry.FieldWidthQuarter && World.Ball.pos.y > World.Geometry.FieldHeightQuarter){
+			//Wait for pass from Wingman
+			let middle : Vector = new Vector(0, World.Geometry.FieldHeightQuarter);
+			new MoveTo(robot).run(middle, World.Geometry.OpponentGoal.angle());
+			return;
+		}
+		//Try to shoot at goal
+		new ShootAtGoal(robot).run();
 	}
 }
