@@ -9,6 +9,7 @@ import { Playstub } from "stp_vibes/plays/playstub";
 import { ShootBall } from "stp_vibes/skills/shootBall";
 import { AttackerManager } from "stp_vibes/tactics/attackerManager";
 import { DefenderManager } from "stp_vibes/tactics/defenderManager";
+import { ShootBallAway } from "stp_vibes/skills/shootBallAway";
 
 /**
  * makes the robot behave according to it's position:
@@ -56,13 +57,15 @@ export class Game extends Playstub {
 			const skill = new MoveTo(robot);
 
 			if(robot == World.FriendlyKeeper) { //keeper
-				
+				amun.log(World.Ball.speed)
 				let goalBallDistance = World.Geometry.FriendlyGoal.distanceTo(World.Ball.pos);
 				if(goalBallDistance < 1) {
 					let goalPosition = World.Geometry.FriendlyGoal;
 					let ballPosition = World.Ball.pos;
 					let ballToOwnGoal : Vector = goalPosition.sub(ballPosition);
 					skill.run(World.Ball.pos, ballToOwnGoal.mul(-1).angle());
+				} else if(goalBallDistance < 5 && Math.abs(World.Ball.speed.x) <= 0.05 && Math.abs(World.Ball.speed.y) <= 0.05){
+					new ShootBallAway(robot).run();
 				} else {
 					skill.run(World.Geometry.FriendlyGoal, standardOrientation);
 				}
