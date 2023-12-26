@@ -8,7 +8,7 @@ import { Vector } from "base/vector";
  * if he's not in the right position, he will take aim first.
  * doesn't save any state.
  */
-export class shootBall {
+export class ShootBall {
 
 	private robot: FriendlyRobot;
     private accuracy = 0.01;
@@ -19,12 +19,27 @@ export class shootBall {
 		this.robot = robot;
 	}
 
-	pass(target: Vector) {
+    /**
+     * Pass the ball somewhere with appropriate strength
+     * @param target Where to pass?
+     * @returns True if the ball was passed, false if the bot repositioned
+     */
+	pass(target: Vector) : boolean {
         let passStrength = this.calculatePassStrength(this.robot.pos, target);
-        this.shoot(target, passStrength);
+        if(this.shoot(target, passStrength)){
+            return true;
+        }else{
+            return false;
+        }
 	}
 
-    shoot(target: Vector, strength: number) {
+    /**
+     * Shoot the ball somewhere
+     * @param target Where to shoot?
+     * @param strength How strong should the shot be? 
+     * @returns True if the ball was shot, false if the bot repositioned
+     */
+    shoot(target: Vector, strength: number) : boolean {
 
         let ballPosition = World.Ball.pos;
 
@@ -45,9 +60,10 @@ export class shootBall {
         
         let moveTo = new MoveTo(this.robot);
 
-
+        let shot = false;
         if(this.robot.hasBall(World.Ball)) {
             this.robot.shoot(strength);
+            shot = true;
         }
 
         if(isInFrontOfBall) {
@@ -68,7 +84,7 @@ export class shootBall {
             //move to aimingPosition
             moveTo.run(aimingPosition, playerToBallVector.mul(-1).angle());
         }
-        
+        return shot;
     }
 
     /**

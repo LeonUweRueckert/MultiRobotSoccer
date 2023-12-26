@@ -27,7 +27,7 @@ export class AttackerManager {
         let totalMinY = - keepOutY;
 
         let deltaX = Math.abs(totalMaxX - totalMinX); //total Attackerfield width
-
+        this.attackers = [];
         for (let i = 0; i < robots.length; i++) {
             let specificMaxX = (deltaX) / robots.length * (i + 1) - (World.Geometry.FieldWidthHalf - keepOutX);
             let specificMinX = (deltaX) / robots.length * i - (World.Geometry.FieldWidthHalf - keepOutX);
@@ -36,8 +36,9 @@ export class AttackerManager {
 	}
 
 	public run(robots: FriendlyRobot[]) {
-        if(this.attackers.length != robots.length) this.instatiate(robots);
-        amun.log(this.attackers.length);
+        if(!Array.isArray(this.attackers) || this.attackers === undefined || this.attackers.length != robots.length){
+            this.instatiate(robots);
+        } 
         for(let i = 0; i < robots.length; i++) {
             this.attackers[i].run(robots, i);
         }
@@ -65,8 +66,7 @@ class Attacker {
 	public run(allAttackers: FriendlyRobot[], indexOfAttacker: number) {
         let robot = allAttackers[indexOfAttacker];
         if(this.passToIndex == -1) {
-            if(allAttackers.length > 1) {
-                this.attackerState = Math.random() > 0.5 ? AttackerState.shoot : AttackerState.pass;
+            if(allAttackers.length > 1) {               
                 while(this.passToIndex == -1) {
                     let index = Math.round(Math.random()) * (allAttackers.length - 1);
                     if(indexOfAttacker != index) this.passToIndex = index; 
@@ -75,16 +75,26 @@ class Attacker {
                 this.passToIndex = 0;
             }
         }
-        
+       
 
         let isCloseToBall = World.Ball.pos.distanceTo(robot.pos) < this.followingFactor;
         let isBallInBounds = World.Ball.pos.x < this.maxX && World.Ball.pos.x > this.minX && World.Ball.pos.y < this.maxY && World.Ball.pos.y > this.minY
 
         if(isCloseToBall || isBallInBounds) {
+            amun.log(this.attackerState)
             //shoot / pass
             switch(this.attackerState) {
-                case AttackerState.pass: new ShootBall(robot).pass(allAttackers[this.passToIndex].pos); break;
-                case AttackerState.shoot: new ShootBall(robot).shoot(World.Geometry.OpponentGoal, 10); break;
+                 // changes attackerState when the bot shot/passed the ball
+                case AttackerState.pass:                   
+                    if(new ShootBall(robot).pass(allAttackers[this.passToIndex].pos)){
+                        this.attackerState = AttackerState.shoot;
+                    } 
+                    break;
+                case AttackerState.shoot: 
+                    if(new ShootBall(robot).shoot(World.Geometry.OpponentGoal, 10)){
+                        this.attackerState = AttackerState.pass;
+                    } 
+                    break;
             }
         } else {
             //move to position in bounds TODO improve

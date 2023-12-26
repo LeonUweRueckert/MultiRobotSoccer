@@ -6,6 +6,8 @@ import { MoveTo } from "stp_vibes/skills/moveto";
 import { ShootAtGoal } from "stp_vibes/skills/shootAtGoal";
 import { ShootMiddle } from "stp_vibes/skills/shootMiddle";
 import { Playstub } from "stp_vibes/plays/playstub";
+import { ShootBall } from "stp_vibes/skills/shootBall";
+import { AttackerManager } from "stp_vibes/tactics/attackerManager";
 
 /**
  * makes the robot behave according to it's position:
@@ -16,6 +18,8 @@ import { Playstub } from "stp_vibes/plays/playstub";
  * 	keeper: stands in the center of his goal until a ball enters his penalty area, then moves towards the ball
  */
 export class Game extends Playstub {
+
+	static attackerManager : AttackerManager = new AttackerManager();
 
 	constructor() {
 		super();
@@ -69,9 +73,9 @@ export class Game extends Playstub {
 					skill.run(new Vector(x,y), standardOrientation);
 					numDefenders++;
 
-				} else if(numChasers < chasersCount) { //chasers
-					this.makeChaser(robot);	
-					numChasers++;
+				// } else if(numChasers < chasersCount) { //chasers
+				// 	//this.makeChaser(robot);	
+				// 	numChasers++;
 
 				} else if(numBlockers < blockerCount) { //blockers
 
@@ -81,20 +85,22 @@ export class Game extends Playstub {
 					let ballToOwnGoal : Vector = goalPosition.sub(ballPosition);
 					skill.run(ballPosition.add(ballToOwnGoal.normalized()), standardOrientation);
 					numBlockers++;
-
-				} else if(numAttackers < attackerCount){ //attackers
-
-					let x = - World.Geometry.FieldWidthHalf + World.Geometry.FieldWidth / attackerCount * numAttackers + World.Geometry.FieldWidth / (attackerCount*2);
-					let y = - 0.5;
-					skill.run(new Vector(x,y), standardOrientation);
-					numAttackers++;
-
 				} else if(numWingman < wingmanCount){
 					this.makeWingman(robot);
-					numWingman++;
+					numWingman++;			   
 				}
+				// } else if(numAttackers < attackerCount){ //attackers
+
+				// 	let x = - World.Geometry.FieldWidthHalf + World.Geometry.FieldWidth / attackerCount * numAttackers + World.Geometry.FieldWidth / (attackerCount*2);
+				// 	let y = - 0.5;
+				// 	skill.run(new Vector(x,y), standardOrientation);
+				// 	numAttackers++;
+
 			}
+			
 		}
+
+		Game.attackerManager.run(robots.slice(robots.length - attackerCount));
 	}
 
 	private makeWingman(robot: FriendlyRobot){
@@ -104,8 +110,9 @@ export class Game extends Playstub {
 			return;
 		}
 		//Pass the Ball in front of enemy goal
-		let skill = new ShootMiddle(robot);
-		skill.run();
+		let middle : Vector = new Vector(0, World.Geometry.FieldHeightQuarter);
+		let skill = new ShootBall(robot);
+		skill.pass(middle);
 
 	}
 
