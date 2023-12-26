@@ -8,6 +8,7 @@ import { ShootMiddle } from "stp_vibes/skills/shootMiddle";
 import { Playstub } from "stp_vibes/plays/playstub";
 import { ShootBall } from "stp_vibes/skills/shootBall";
 import { AttackerManager } from "stp_vibes/tactics/attackerManager";
+import { DefenderManager } from "stp_vibes/tactics/defenderManager";
 
 /**
  * makes the robot behave according to it's position:
@@ -20,6 +21,7 @@ import { AttackerManager } from "stp_vibes/tactics/attackerManager";
 export class Game extends Playstub {
 
 	static attackerManager : AttackerManager = new AttackerManager();
+	static defenderManager : DefenderManager = new DefenderManager();
 
 	constructor() {
 		super();
@@ -66,16 +68,17 @@ export class Game extends Playstub {
 				}
 
 			} else {
-				if(numDefenders < defensePlayerCount) { //defense
+				// if(numDefenders < defensePlayerCount) { //defense
 
-					let x = - World.Geometry.FieldWidthHalf + World.Geometry.FieldWidth / defensePlayerCount * numDefenders + World.Geometry.FieldWidth / (defensePlayerCount*2);
-					let y = - World.Geometry.FieldHeightQuarter;
-					skill.run(new Vector(x,y), standardOrientation);
-					numDefenders++;
+				// 	let x = - World.Geometry.FieldWidthHalf + World.Geometry.FieldWidth / defensePlayerCount * numDefenders + World.Geometry.FieldWidth / (defensePlayerCount*2);
+				// 	let y = - World.Geometry.FieldHeightQuarter;
+				// 	skill.run(new Vector(x,y), standardOrientation);
+				// 	numDefenders++;
 
-				// } else if(numChasers < chasersCount) { //chasers
-				// 	//this.makeChaser(robot);	
-				// 	numChasers++;
+				//  } else if(numChasers < chasersCount) { //chasers
+				if(numChasers < chasersCount) { //chasers
+				 	//this.makeChaser(robot);	
+				 	numChasers++;
 
 				} else if(numBlockers < blockerCount) { //blockers
 
@@ -99,9 +102,10 @@ export class Game extends Playstub {
 			}
 			
 		}
-
-		Game.attackerManager.run(robots.slice(robots.length - attackerCount));
+		Game.defenderManager.run(robots.slice(robots.length - attackerCount - defensePlayerCount, robots.length - attackerCount));
+		//Game.attackerManager.run(robots.slice(robots.length - attackerCount));
 	}
+
 
 	private makeWingman(robot: FriendlyRobot){
 		let ballPosition = World.Ball.pos;
