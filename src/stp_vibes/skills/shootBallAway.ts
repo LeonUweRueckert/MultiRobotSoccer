@@ -49,11 +49,11 @@ export class ShootBallAway {
         let shot = false;
         if(this.robot.hasBall(World.Ball)) {
             if(Math.random() > 0.5){
-                //this.robot.shoot(10);
+                this.robot.shoot(10);
             }else{
-                
+                this.robot.chip(Math.random() * 10); 
             }   
-            this.robot.chip(Math.random() * 10);     
+                
             shot = true;
         }
 
