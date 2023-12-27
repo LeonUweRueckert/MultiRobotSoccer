@@ -57,7 +57,6 @@ export class Game extends Playstub {
 			const skill = new MoveTo(robot);
 
 			if(robot == World.FriendlyKeeper) { //keeper
-				amun.log(World.Ball.speed)
 				let goalBallDistance = World.Geometry.FriendlyGoal.distanceTo(World.Ball.pos);
 				if(goalBallDistance < 1) {
 					let goalPosition = World.Geometry.FriendlyGoal;
