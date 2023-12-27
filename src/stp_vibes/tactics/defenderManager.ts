@@ -5,6 +5,7 @@ import { Vector } from "base/vector";
 import { ShootBall } from "stp_vibes/skills/shootBall";
 import { Random } from "base/random";
 import { ShootBallAway } from "stp_vibes/skills/shootBallAway";
+import { FollowBall } from "stp_vibes/skills/followBall";
 
 
 /**
@@ -71,9 +72,11 @@ class Defender {
         let isCloseToBall = World.Ball.pos.distanceTo(robot.pos) < this.followingFactor;
         let isBallInBounds = World.Ball.pos.x < this.maxX && World.Ball.pos.x > this.minX && World.Ball.pos.y < this.maxY && World.Ball.pos.y > this.minY
 
-        if(isCloseToBall || isBallInBounds) {
+        if(isCloseToBall && isBallInBounds) {
             new ShootBallAway(robot).run();
             
+        } else if(isBallInBounds) {
+            new FollowBall(robot).run();
         } else {
             //move to position in bounds TODO improve
             let centerPoint = new Vector((this.maxX + this.minX) / 2, (this.maxY - Math.abs(this.minY)) / 2);
