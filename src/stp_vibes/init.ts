@@ -1,22 +1,32 @@
 import "base/base";
 import "base/entrypoints";
 import * as debug from "base/debug";
-import * as vis from "base/vis";
 import * as plot from "base/plot";
 import * as World from "base/world";
 import * as EntryPoints from "base/entrypoints";
 import { log } from "base/amun";
-import { main as trainer } from "stp_vibes/trainerstub";
+import { main as gametrainer } from "stp_vibes/gameTrainer";
+import { main as simplegametrainer } from "stp_vibes/simpleGameTrainer";
 
-function main(): boolean {
+function game(): boolean {
 	amun.log("Main Loop")
 
-	trainer()
+	gametrainer()
 
 	return true;
 }
 
-EntryPoints.add("Demo", main);
+EntryPoints.add("Game", game);
+
+function simpleGame(): boolean {
+	amun.log("Main Loop")
+
+	simplegametrainer()
+
+	return true;
+}
+
+EntryPoints.add("SimpleGame", simpleGame);
 
 function wrapper(func: () => boolean): () => void {
 	function f() {
@@ -33,4 +43,4 @@ function wrapper(func: () => boolean): () => void {
 	return f;
 }
 
-export let scriptInfo = { name: "Demo Strategy", entrypoints: EntryPoints.get(wrapper) }
+export let scriptInfo = { name: "Game Strategy", entrypoints: EntryPoints.get(wrapper) }
