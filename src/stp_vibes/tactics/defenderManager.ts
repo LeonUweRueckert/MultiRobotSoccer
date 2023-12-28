@@ -23,7 +23,7 @@ export class DefenderManager {
 	private instatiate(robots: FriendlyRobot[]) {
         //each defender gets a horizontal slice of the pitch
         let keepOutX = 0.5;
-        let keepOutY = 1;
+        let keepOutY = 0;
         let totalMaxX = World.Geometry.FieldWidthHalf - keepOutX;
         let totalMinX = - totalMaxX;
         let totalMaxY = - keepOutY;

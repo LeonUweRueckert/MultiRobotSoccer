@@ -20,7 +20,7 @@ export class AttackerManager {
 	private instatiate(robots: FriendlyRobot[]) {
         //each attacker gets a horizontal slice of the pitch
         let keepOutX = 0.5;
-        let keepOutY = 1;
+        let keepOutY = 0.5;
         let totalMaxX = World.Geometry.FieldWidthHalf - keepOutX;
         let totalMinX = - totalMaxX;
         let totalMaxY = World.Geometry.FieldHeightHalf - keepOutY;
@@ -90,7 +90,7 @@ class Attacker {
                     } 
                     break;
                 case AttackerState.shoot: 
-                    if(new ShootBall(robot).shoot(World.Geometry.OpponentGoal, 10)){
+                    if(new ShootBall(robot).shoot(World.Geometry.OpponentGoal, 10, false)){
                         this.attackerState = AttackerState.pass;
                     } 
                     break;
