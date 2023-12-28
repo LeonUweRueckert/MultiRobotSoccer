@@ -21,14 +21,15 @@ export class ShootBall {
 
     /**
      * Pass the ball somewhere with appropriate strength
-     * @param target Where to pass?
+     * @param target Where to pass? 
+     * @param chip if true, chip, else shoot 
      * @returns True if the ball was passed, false if the bot repositioned
      */
 	pass(target: Vector) : boolean {
         let passStrength = this.calculatePassStrength(this.robot.pos, target);
-        if(this.shoot(target, passStrength)){
+        if(this.shoot(target, passStrength, false)){
             return true;
-        }else{
+        } else{
             return false;
         }
 	}
@@ -36,10 +37,11 @@ export class ShootBall {
     /**
      * Shoot the ball somewhere
      * @param target Where to shoot?
-     * @param strength How strong should the shot be? 
+     * @param strength How strong should the shot be?
+     * @param chip if true, chip, else shoot 
      * @returns True if the ball was shot, false if the bot repositioned
      */
-    shoot(target: Vector, strength: number) : boolean {
+    shoot(target: Vector, strength: number, chip: boolean) : boolean {
 
         let ballPosition = World.Ball.pos;
 
@@ -62,7 +64,11 @@ export class ShootBall {
 
         let shot = false;
         if(this.robot.hasBall(World.Ball)) {
-            this.robot.shoot(strength);
+            if(chip) {
+                this.robot.chip(strength);
+            } else {
+                this.robot.shoot(strength);
+            }
             shot = true;
         }
 
@@ -92,7 +98,7 @@ export class ShootBall {
      */
     private calculatePassStrength(playerPosition: Vector, targetPosition: Vector): number {
         let maxShotStrength = 6.1; //6.1 m/s
-        let fullStrengthDistance = 10; //shoot at max strength if distance = fullstrengthDistance
+        let fullStrengthDistance = 1; //shoot at max strength if distance = fullstrengthDistance; 10 is good value for 2014 pitch, 
         let distance = playerPosition.distanceTo(targetPosition);
         return maxShotStrength * (distance / fullStrengthDistance);
     }
