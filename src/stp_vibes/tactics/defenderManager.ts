@@ -82,8 +82,3 @@ class Defender {
         }
 	}
 }
-
-enum AttackerState {
-    pass,
-    shoot
-}
